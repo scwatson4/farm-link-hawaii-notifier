@@ -397,55 +397,61 @@ def main() -> int:
         return 0
 
     prior_products: dict[str, Any] = state.get("products", {}) or {}
-    notifications: list[dict[str, Any]] = []  # list of (embed, product_id, updates)
+    notifications: list[dict[str, Any]] = []
     new_products_state: dict[str, Any] = {}
 
     for pid, cur in current.items():
         matched = evaluate_rules(cur, rules)
-        triggers_new_in_produce = (
-            new_in_produce_enabled and "produce" in cur["collections"] and pid not in prior_products
-        )
+        is_in_produce = "produce" in cur["collections"]
+        ts = now_iso()
 
         prior = prior_products.get(pid)
-        if prior is None:
-            # New product.
-            notified_first = False
-            if matched or triggers_new_in_produce:
-                reason_parts: list[str] = []
+        prev_notified_first = bool(prior.get("notified_first")) if prior else False
+        prev_available = bool(prior.get("available")) if prior else False
+        prev_notified_back = prior.get("notified_back_in_stock_at") if prior else None
+
+        notified_first_out = prev_notified_first
+        notified_back_out = prev_notified_back
+
+        if not prev_notified_first:
+            # Either a brand-new product, or one we saw previously while out of
+            # stock and held the alert for. Only fire when it's actually in stock.
+            if cur["available"]:
                 if matched:
-                    reason_parts.append("First seen")
-                if triggers_new_in_produce and not matched:
-                    reason_parts.append("New in produce")
-                embed = build_embed(
-                    cur, matched, " + ".join(reason_parts) or "First seen",
-                    new_in_produce=triggers_new_in_produce,
-                )
-                notifications.append(embed)
-                notified_first = True
-            record_product(new_products_state, cur, matched, first=True, notified_first=notified_first)
+                    notifications.append(build_embed(
+                        cur, matched, "First seen", new_in_produce=False,
+                    ))
+                    notified_first_out = True
+                elif new_in_produce_enabled and is_in_produce:
+                    notifications.append(build_embed(
+                        cur, matched, "New in produce", new_in_produce=True,
+                    ))
+                    notified_first_out = True
         else:
-            ts = now_iso()
-            was_available = bool(prior.get("available"))
-            notified_back = prior.get("notified_back_in_stock_at")
-            new_record = {
-                "title": cur["title"],
-                "handle": cur["handle"],
-                "vendor": cur["vendor"],
-                "collections": list(cur["collections"]),
-                "first_seen": prior.get("first_seen") or ts,
-                "last_seen": ts,
-                "available": cur["available"],
-                "matched_rules": list(matched),
-                "notified_first": bool(prior.get("notified_first")),
-                "notified_back_in_stock_at": notified_back,
-            }
-            if matched and not was_available and cur["available"] and not notified_back:
-                embed = build_embed(cur, matched, "Back in stock", new_in_produce=False)
-                notifications.append(embed)
-                new_record["notified_back_in_stock_at"] = ts
-            if not cur["available"]:
-                new_record["notified_back_in_stock_at"] = None
-            new_products_state[pid] = new_record
+            # Already alerted the first time. Fire back-in-stock on OOS→in-stock
+            # transitions for products with matching rules.
+            if matched and not prev_available and cur["available"] and not prev_notified_back:
+                notifications.append(build_embed(
+                    cur, matched, "Back in stock", new_in_produce=False,
+                ))
+                notified_back_out = ts
+
+        # Re-arm restock alerts whenever the product is currently out of stock.
+        if not cur["available"]:
+            notified_back_out = None
+
+        new_products_state[pid] = {
+            "title": cur["title"],
+            "handle": cur["handle"],
+            "vendor": cur["vendor"],
+            "collections": list(cur["collections"]),
+            "first_seen": (prior.get("first_seen") if prior else None) or ts,
+            "last_seen": ts,
+            "available": cur["available"],
+            "matched_rules": list(matched),
+            "notified_first": notified_first_out,
+            "notified_back_in_stock_at": notified_back_out,
+        }
 
     # Products that vanished from the fetch: keep them, mark unavailable, re-arm restock.
     for pid, prior in prior_products.items():

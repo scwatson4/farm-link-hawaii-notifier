@@ -4,12 +4,12 @@ collections_to_monitor:
 
 rules:
   - name: "Mango"
-    collections: [produce, drinks]
+    collections: [produce]
     match_any:
       - title_contains: mango
 
   - name: "Lilikoi / Passionfruit"
-    collections: [produce, drinks]
+    collections: [produce]
     match_any:
       - title_contains: lilikoi
       - title_contains: passion fruit
