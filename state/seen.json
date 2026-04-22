@@ -1233,22 +1233,6 @@
       "title": "Broccolini",
       "vendor": "From Our Farmers (Hawai\u02bbi)"
     },
-    "7630388133945": {
-      "available": true,
-      "collections": [
-        "produce"
-      ],
-      "first_seen": "2026-04-22T08:10:42Z",
-      "handle": "brooks-late-mango",
-      "last_seen": "2026-04-22T08:10:42Z",
-      "matched_rules": [
-        "Mango"
-      ],
-      "notified_back_in_stock_at": null,
-      "notified_first": true,
-      "title": "Brooks Late Mango",
-      "vendor": "Mapele Fields (O\u02bbahu)"
-    },
     "7630388232249": {
       "available": true,
       "collections": [],
