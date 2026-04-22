@@ -10,6 +10,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import re
 import sys
 import time
 from datetime import datetime, timezone
@@ -163,6 +164,39 @@ def validate_collection_groups(session: requests.Session) -> None:
 
 def product_available(product: dict[str, Any]) -> bool:
     return any(v.get("available") for v in product.get("variants", []))
+
+
+# Farm Link Hawaii's /products.json returns stale `available: true` for
+# products whose storefront button is actually disabled with "Sold out".
+# Authoritative signal: the <button name="add" ...> tag's `disabled` attr.
+_ADD_BUTTON_RE = re.compile(r'<button[^>]*\bname="add"[^>]*>', re.IGNORECASE)
+
+
+def confirm_in_stock(session: requests.Session, handle: str) -> bool:
+    """Fetch the product's storefront HTML and confirm the add-to-cart button
+    is enabled. Fail closed on network errors (treat as not in stock) so a
+    Shopify blip can't produce false-positive alerts."""
+    url = f"{CONFIG['store_base']}/products/{handle}"
+    text: str | None = None
+    for attempt in range(4):
+        try:
+            r = session.get(url, timeout=CONFIG["request_timeout"])
+        except requests.RequestException:
+            pass
+        else:
+            if r.status_code == 200:
+                text = r.text
+                break
+            if r.status_code not in (429, 502, 503, 504):
+                return False
+        if attempt < 3:
+            time.sleep(2 ** attempt)
+    if text is None:
+        return False
+    m = _ADD_BUTTON_RE.search(text)
+    if not m:
+        return False
+    return "disabled" not in m.group(0).lower()
 
 
 def product_price_range(product: dict[str, Any]) -> tuple[float, float] | None:
@@ -399,6 +433,7 @@ def main() -> int:
     prior_products: dict[str, Any] = state.get("products", {}) or {}
     notifications: list[dict[str, Any]] = []
     new_products_state: dict[str, Any] = {}
+    confirmations = 0
 
     for pid, cur in current.items():
         matched = evaluate_rules(cur, rules)
@@ -413,9 +448,20 @@ def main() -> int:
         notified_first_out = prev_notified_first
         notified_back_out = prev_notified_back
 
+        # The bulk /products.json `available` flag is stale for this store.
+        # For any product that WOULD alert if in stock, confirm availability
+        # against the storefront HTML before firing. Products that aren't
+        # candidates for alerting skip the extra request.
+        alert_candidate = (
+            (not prev_notified_first and (matched or (new_in_produce_enabled and is_in_produce)))
+            or (prev_notified_first and matched and not prev_available and not prev_notified_back)
+        )
+        if alert_candidate and cur["available"]:
+            confirmations += 1
+            if not confirm_in_stock(session, cur["handle"]):
+                cur["available"] = False
+
         if not prev_notified_first:
-            # Either a brand-new product, or one we saw previously while out of
-            # stock and held the alert for. Only fire when it's actually in stock.
             if cur["available"]:
                 if matched:
                     notifications.append(build_embed(
@@ -428,8 +474,6 @@ def main() -> int:
                     ))
                     notified_first_out = True
         else:
-            # Already alerted the first time. Fire back-in-stock on OOS→in-stock
-            # transitions for products with matching rules.
             if matched and not prev_available and cur["available"] and not prev_notified_back:
                 notifications.append(build_embed(
                     cur, matched, "Back in stock", new_in_produce=False,
@@ -463,7 +507,7 @@ def main() -> int:
         carried["last_seen"] = prior.get("last_seen") or now_iso()
         new_products_state[pid] = carried
 
-    print(f"notifications queued: {len(notifications)}")
+    print(f"notifications queued: {len(notifications)} (confirmed stock on {confirmations} candidate(s))")
 
     if args.dry_run:
         for i, emb in enumerate(notifications, 1):
