@@ -124,6 +124,13 @@ python check.py --force-bootstrap
 ## Caveats
 
 - GitHub Actions cron is best-effort; expect 5–15 min lag under load.
+- Farm Link's bulk `/products.json` feed reports stale `available: true` for
+  many sold-out products. Before firing any alert, `check.py` re-fetches the
+  product's storefront HTML and verifies the add-to-cart button is not
+  disabled (see `confirm_in_stock` in `check.py`). If the theme changes and
+  that button selector stops matching, alerts will silently stop firing —
+  the `confirmed stock on N candidate(s)` line in each run's logs is your
+  canary.
 - A product that existed before you added a matching rule will **not** fire —
   dedup keys off product ID, not rule membership. If you want retroactive
   alerts, remove matching entries from `state/seen.json` and push.
