@@ -1,0 +1,47 @@
+collections_to_monitor:
+  - produce
+  - drinks
+
+rules:
+  - name: "Mango"
+    collections: [produce, drinks]
+    match_any:
+      - title_contains: mango
+
+  - name: "Lilikoi / Passionfruit"
+    collections: [produce, drinks]
+    match_any:
+      - title_contains: lilikoi
+      - title_contains: passion fruit
+      - title_contains: passionfruit
+
+  - name: "Sugarcane (produce)"
+    collections: [produce]
+    match_any:
+      - title_contains: sugarcane
+      - title_contains: sugar cane
+
+  - name: "Sugarcane juice (drinks)"
+    collections: [drinks]
+    match_any:
+      - title_contains: sugarcane juice
+      - title_contains: cane juice
+
+  - name: "Pineapple (not Dole)"
+    collections: [produce]
+    match_any:
+      - title_contains: pineapple
+    exclude_if_any:
+      - vendor_equals: Dole
+      - title_contains: dole
+
+  - name: "Sweet Cane Cafe drinks (not Cacao Nectar)"
+    collections: [drinks]
+    match_any:
+      - vendor_equals: Sweet Cane Cafe
+    exclude_if_any:
+      - title_contains: cacao nectar
+
+new_in_produce:
+  enabled: true   # fires on never-before-seen items in the produce collection
+                  # (serves as the "unique fruit" alert)
