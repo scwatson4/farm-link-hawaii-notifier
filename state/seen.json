@@ -1234,7 +1234,7 @@
       "vendor": "From Our Farmers (Hawai\u02bbi)"
     },
     "7630388133945": {
-      "available": true,
+      "available": false,
       "collections": [
         "produce"
       ],
@@ -1245,7 +1245,7 @@
         "Mango"
       ],
       "notified_back_in_stock_at": null,
-      "notified_first": true,
+      "notified_first": false,
       "title": "Brooks Late Mango",
       "vendor": "Mapele Fields (O\u02bbahu)"
     },
@@ -1760,7 +1760,7 @@
       "vendor": "Hawaii Agriculture Research Center"
     },
     "7630392033337": {
-      "available": true,
+      "available": false,
       "collections": [
         "produce"
       ],
@@ -1771,7 +1771,7 @@
         "Mango"
       ],
       "notified_back_in_stock_at": null,
-      "notified_first": true,
+      "notified_first": false,
       "title": "Chinese Mango",
       "vendor": "Top Notch Fruits & Chickens (O\u02bbahu)"
     },
@@ -2172,7 +2172,7 @@
       "vendor": "Lonohana Estate Chocolate (O\u02bbahu)"
     },
     "7630394359865": {
-      "available": true,
+      "available": false,
       "collections": [
         "produce"
       ],
@@ -2183,7 +2183,7 @@
         "Mango"
       ],
       "notified_back_in_stock_at": null,
-      "notified_first": true,
+      "notified_first": false,
       "title": "Cogshall Mango",
       "vendor": "Lokoea Farms (O\u02bbahu)"
     },
@@ -2452,7 +2452,7 @@
       "vendor": "Ho Farms (O\u02bbahu)"
     },
     "7630396588089": {
-      "available": true,
+      "available": false,
       "collections": [
         "produce"
       ],
@@ -2463,7 +2463,7 @@
         "Mango"
       ],
       "notified_back_in_stock_at": null,
-      "notified_first": true,
+      "notified_first": false,
       "title": "Cushman Mango",
       "vendor": "Tin Roof Ranch (O\u02bbahu)"
     },
@@ -2790,7 +2790,7 @@
       "vendor": "Manele Spice Co. (O\u02bbahu)"
     },
     "7630399111225": {
-      "available": true,
+      "available": false,
       "collections": [
         "produce"
       ],
@@ -2801,7 +2801,7 @@
         "Mango"
       ],
       "notified_back_in_stock_at": null,
-      "notified_first": true,
+      "notified_first": false,
       "title": "Excel Mango",
       "vendor": "Aloha Fruits"
     },
@@ -2830,7 +2830,7 @@
       "vendor": "Waialua Estate Chocolate and Coffee (O\u02bbahu)"
     },
     "7630399438905": {
-      "available": true,
+      "available": false,
       "collections": [
         "produce"
       ],
@@ -2841,7 +2841,7 @@
         "Mango"
       ],
       "notified_back_in_stock_at": null,
-      "notified_first": true,
+      "notified_first": false,
       "title": "Extra Large Kona King Mango",
       "vendor": "Adaptations (Hawai\u02bbi)"
     },
@@ -3362,7 +3362,7 @@
       "vendor": "Kuilima Farms (O\u02bbahu)"
     },
     "7630403174457": {
-      "available": true,
+      "available": false,
       "collections": [
         "produce"
       ],
@@ -3373,7 +3373,7 @@
         "Mango"
       ],
       "notified_back_in_stock_at": null,
-      "notified_first": true,
+      "notified_first": false,
       "title": "Golden Glow Mango",
       "vendor": "Yee's Orchard (Maui)"
     },
@@ -3432,7 +3432,7 @@
       "vendor": "Firmiana's Cultured Vegetables (Maui)"
     },
     "7630403469369": {
-      "available": true,
+      "available": false,
       "collections": [
         "produce"
       ],
@@ -3443,7 +3443,7 @@
         "Mango"
       ],
       "notified_back_in_stock_at": null,
-      "notified_first": true,
+      "notified_first": false,
       "title": "Gouveia Mango",
       "vendor": "Makaha Mangoes (O\u02bbahu)"
     },
@@ -4260,7 +4260,7 @@
       "vendor": "Lokoea Farms (O\u02bbahu)"
     },
     "7630411202617": {
-      "available": true,
+      "available": false,
       "collections": [
         "produce"
       ],
@@ -4271,7 +4271,7 @@
         "Sugarcane (produce)"
       ],
       "notified_back_in_stock_at": null,
-      "notified_first": true,
+      "notified_first": false,
       "title": "Green Sugarcane",
       "vendor": "Oko\u02bba Farms (Maui)"
     },
@@ -4506,7 +4506,7 @@
       "vendor": "Hashimoto Persimmon Products (Maui)"
     },
     "7630412546105": {
-      "available": true,
+      "available": false,
       "collections": [
         "produce"
       ],
@@ -4517,7 +4517,7 @@
         "Mango"
       ],
       "notified_back_in_stock_at": null,
-      "notified_first": true,
+      "notified_first": false,
       "title": "Haden Mango",
       "vendor": "Makaha Mangoes (O\u02bbahu)"
     },
@@ -5598,7 +5598,7 @@
       "vendor": "Ho Farms (O\u02bbahu)"
     },
     "7630420213817": {
-      "available": true,
+      "available": false,
       "collections": [
         "produce"
       ],
@@ -5609,7 +5609,7 @@
         "Mango"
       ],
       "notified_back_in_stock_at": null,
-      "notified_first": true,
+      "notified_first": false,
       "title": "Julie Mango",
       "vendor": "Lokoea Farms (O\u02bbahu)"
     },
@@ -6064,7 +6064,7 @@
       "vendor": "Mahi Pono (Maui)"
     },
     "7630422409273": {
-      "available": true,
+      "available": false,
       "collections": [
         "produce"
       ],
@@ -6075,12 +6075,12 @@
         "Mango"
       ],
       "notified_back_in_stock_at": null,
-      "notified_first": true,
+      "notified_first": false,
       "title": "Keitt Mango",
       "vendor": "Carson Magoon"
     },
     "7630422442041": {
-      "available": true,
+      "available": false,
       "collections": [
         "produce"
       ],
@@ -6091,12 +6091,12 @@
         "Mango"
       ],
       "notified_back_in_stock_at": null,
-      "notified_first": true,
+      "notified_first": false,
       "title": "Keitt Mango - Jumbo",
       "vendor": "Adaptations (Hawai\u02bbi)"
     },
     "7630422507577": {
-      "available": true,
+      "available": false,
       "collections": [
         "produce"
       ],
@@ -6107,7 +6107,7 @@
         "Mango"
       ],
       "notified_back_in_stock_at": null,
-      "notified_first": true,
+      "notified_first": false,
       "title": "Kensington Pride Mango",
       "vendor": "Adaptations (Hawai\u02bbi)"
     },
@@ -6434,7 +6434,7 @@
       "vendor": "Kona Sea Salt (Hawai\u02bbi)"
     },
     "7630424539193": {
-      "available": true,
+      "available": false,
       "collections": [
         "produce"
       ],
@@ -6445,7 +6445,7 @@
         "Mango"
       ],
       "notified_back_in_stock_at": null,
-      "notified_first": true,
+      "notified_first": false,
       "title": "Kona King Mango",
       "vendor": "Adaptations (Hawai\u02bbi)"
     },
@@ -6764,7 +6764,7 @@
       "vendor": "Kupu Place Aquaponics (O\u02bbahu)"
     },
     "7630426636345": {
-      "available": true,
+      "available": false,
       "collections": [
         "produce"
       ],
@@ -6775,7 +6775,7 @@
         "Mango"
       ],
       "notified_back_in_stock_at": null,
-      "notified_first": true,
+      "notified_first": false,
       "title": "Lemon Drop Mangosteen",
       "vendor": "Lokoea Farms (O\u02bbahu)"
     },
@@ -7456,7 +7456,7 @@
       "vendor": "M\u0101noa Chocolate (O\u02bbahu)"
     },
     "7630431125561": {
-      "available": true,
+      "available": false,
       "collections": [
         "produce"
       ],
@@ -7467,7 +7467,7 @@
         "Mango"
       ],
       "notified_back_in_stock_at": null,
-      "notified_first": true,
+      "notified_first": false,
       "title": "Mango",
       "vendor": "Makaha Mangoes (O\u02bbahu)"
     },
@@ -7562,7 +7562,7 @@
       "vendor": "La Tour Bakehouse (O\u02bbahu)"
     },
     "7630431879225": {
-      "available": true,
+      "available": false,
       "collections": [
         "produce"
       ],
@@ -7573,7 +7573,7 @@
         "Mango"
       ],
       "notified_back_in_stock_at": null,
-      "notified_first": true,
+      "notified_first": false,
       "title": "Mangosteen",
       "vendor": "OK Farms (Hawai\u02bbi)"
     },
@@ -7604,7 +7604,7 @@
       "vendor": "Farm Link Hawai\u2018i (O\u02bbahu)"
     },
     "7630432043065": {
-      "available": true,
+      "available": false,
       "collections": [
         "produce"
       ],
@@ -7615,7 +7615,7 @@
         "Mango"
       ],
       "notified_back_in_stock_at": null,
-      "notified_first": true,
+      "notified_first": false,
       "title": "Mapulehu Mango",
       "vendor": "Makaha Mangoes (O\u02bbahu)"
     },
@@ -7694,7 +7694,7 @@
       "vendor": "Maui Upcountry Jams and Jellies (Maui)"
     },
     "7630432665657": {
-      "available": true,
+      "available": false,
       "collections": [
         "produce"
       ],
@@ -7705,7 +7705,7 @@
         "Pineapple (not Dole)"
       ],
       "notified_back_in_stock_at": null,
-      "notified_first": true,
+      "notified_first": false,
       "title": "Maui Sugar Pineapple",
       "vendor": "Hiki No Farms (O\u02bbahu)"
     },
@@ -7994,7 +7994,7 @@
       "vendor": "Maui Breadfruit Company (Maui)"
     },
     "7630434795577": {
-      "available": true,
+      "available": false,
       "collections": [
         "produce"
       ],
@@ -8005,7 +8005,7 @@
         "Mango"
       ],
       "notified_back_in_stock_at": null,
-      "notified_first": true,
+      "notified_first": false,
       "title": "Momi K Mango",
       "vendor": "Makaha Mangoes (O\u02bbahu)"
     },
@@ -9610,7 +9610,7 @@
       "vendor": "\u02bbAno\u02bbano Farms (Hawai\u02bbi)"
     },
     "7630443020345": {
-      "available": true,
+      "available": false,
       "collections": [
         "produce"
       ],
@@ -9621,7 +9621,7 @@
         "Mango"
       ],
       "notified_back_in_stock_at": null,
-      "notified_first": true,
+      "notified_first": false,
       "title": "Organic Green Mango",
       "vendor": "MA\u2018O Organic Farms (O\u02bbahu)"
     },
@@ -10322,7 +10322,7 @@
       "vendor": "ONO Organic Farms (Maui)"
     },
     "7630445510713": {
-      "available": true,
+      "available": false,
       "collections": [
         "produce"
       ],
@@ -10333,7 +10333,7 @@
         "Mango"
       ],
       "notified_back_in_stock_at": null,
-      "notified_first": true,
+      "notified_first": false,
       "title": "Organic Mango",
       "vendor": "ONO Organic Farms (Maui)"
     },
@@ -10662,7 +10662,7 @@
       "vendor": "Waialua Growers (O\u02bbahu)"
     },
     "7630446952505": {
-      "available": true,
+      "available": false,
       "collections": [
         "produce"
       ],
@@ -10673,7 +10673,7 @@
         "Pineapple (not Dole)"
       ],
       "notified_back_in_stock_at": null,
-      "notified_first": true,
+      "notified_first": false,
       "title": "Organic Pineapple Banana",
       "vendor": "Hawai\u02bbi Banana Source (O\u02bbahu)"
     },
@@ -12384,7 +12384,7 @@
       "vendor": "Mountain View Farms (O\u02bbahu)"
     },
     "7630454685753": {
-      "available": true,
+      "available": false,
       "collections": [
         "produce"
       ],
@@ -12395,7 +12395,7 @@
         "Pineapple (not Dole)"
       ],
       "notified_back_in_stock_at": null,
-      "notified_first": true,
+      "notified_first": false,
       "title": "Pineapple",
       "vendor": "Maui Gold (Maui)"
     },
@@ -12412,7 +12412,7 @@
       "vendor": "Maui Gold (Maui)"
     },
     "7630454751289": {
-      "available": true,
+      "available": false,
       "collections": [
         "produce"
       ],
@@ -12423,7 +12423,7 @@
         "Pineapple (not Dole)"
       ],
       "notified_back_in_stock_at": null,
-      "notified_first": true,
+      "notified_first": false,
       "title": "Pineapple Chunks (Frozen)",
       "vendor": "Farm Link Hawai\u2018i (O\u02bbahu)"
     },
@@ -13288,7 +13288,7 @@
       "vendor": "Twin Bridge Farms (O\u02bbahu)"
     },
     "7630460715065": {
-      "available": true,
+      "available": false,
       "collections": [
         "produce"
       ],
@@ -13299,7 +13299,7 @@
         "Sugarcane (produce)"
       ],
       "notified_back_in_stock_at": null,
-      "notified_first": true,
+      "notified_first": false,
       "title": "Purple Sugarcane",
       "vendor": "Oko\u02bba Farms (Maui)"
     },
@@ -13454,7 +13454,7 @@
       "vendor": "Forage Hawai\u02bbi (O\u02bbahu)"
     },
     "7630461468729": {
-      "available": true,
+      "available": false,
       "collections": [
         "produce"
       ],
@@ -13465,7 +13465,7 @@
         "Mango"
       ],
       "notified_back_in_stock_at": null,
-      "notified_first": true,
+      "notified_first": false,
       "title": "Rapoza Mango",
       "vendor": "From Our Farmers (Hawai\u02bbi)"
     },
@@ -14986,7 +14986,7 @@
       "vendor": "Rainbow Trader (O\u02bbahu)"
     },
     "7630469693497": {
-      "available": true,
+      "available": false,
       "collections": [
         "produce"
       ],
@@ -14997,7 +14997,7 @@
         "Mango"
       ],
       "notified_back_in_stock_at": null,
-      "notified_first": true,
+      "notified_first": false,
       "title": "Sunglo Mango",
       "vendor": "Mountain View Farms (O\u02bbahu)"
     },
@@ -15990,7 +15990,7 @@
       "vendor": "M\u0101noa Honey & Mead (O\u02bbahu)"
     },
     "7630476148793": {
-      "available": true,
+      "available": false,
       "collections": [
         "produce"
       ],
@@ -16001,12 +16001,12 @@
         "Pineapple (not Dole)"
       ],
       "notified_back_in_stock_at": null,
-      "notified_first": true,
+      "notified_first": false,
       "title": "White Pineapple",
       "vendor": "Hiki No Farms (O\u02bbahu)"
     },
     "7630476214329": {
-      "available": true,
+      "available": false,
       "collections": [
         "produce"
       ],
@@ -16017,7 +16017,7 @@
         "Mango"
       ],
       "notified_back_in_stock_at": null,
-      "notified_first": true,
+      "notified_first": false,
       "title": "White Pirie Mango",
       "vendor": "Makaha Mangoes (O\u02bbahu)"
     },
@@ -16994,7 +16994,7 @@
       "vendor": "Milk Market (O\u02bbahu)"
     },
     "7660422103097": {
-      "available": true,
+      "available": false,
       "collections": [
         "produce"
       ],
@@ -17005,7 +17005,7 @@
         "Mango"
       ],
       "notified_back_in_stock_at": null,
-      "notified_first": true,
+      "notified_first": false,
       "title": "Golden Glow Mango Bulk",
       "vendor": "Yee's Orchard (Maui)"
     },
@@ -17046,7 +17046,7 @@
       "vendor": "Makaha Mangoes (O\u02bbahu)"
     },
     "7660426592313": {
-      "available": true,
+      "available": false,
       "collections": [
         "drinks"
       ],
@@ -17058,7 +17058,7 @@
         "Sweet Cane Cafe drinks (not Cacao Nectar)"
       ],
       "notified_back_in_stock_at": null,
-      "notified_first": true,
+      "notified_first": false,
       "title": "Liliko\u02bbi Cane Juice",
       "vendor": "Sweet Cane Cafe (Hawai\u02bbi)"
     },
@@ -17155,7 +17155,7 @@
       "vendor": "MA\u2018O Organic Farms (O\u02bbahu)"
     },
     "7660428722233": {
-      "available": true,
+      "available": false,
       "collections": [
         "drinks"
       ],
@@ -17167,7 +17167,7 @@
         "Sweet Cane Cafe drinks (not Cacao Nectar)"
       ],
       "notified_back_in_stock_at": null,
-      "notified_first": true,
+      "notified_first": false,
       "title": "Original Cane Juice",
       "vendor": "Sweet Cane Cafe (Hawai\u02bbi)"
     },
@@ -17662,7 +17662,7 @@
       "vendor": "Oko\u02bba Farms (Maui)"
     },
     "7682481651769": {
-      "available": true,
+      "available": false,
       "collections": [
         "produce"
       ],
@@ -17673,7 +17673,7 @@
         "Mango"
       ],
       "notified_back_in_stock_at": null,
-      "notified_first": true,
+      "notified_first": false,
       "title": "Tommy Atkins Mango",
       "vendor": "Ki\u02bbiki\u02bbi Farm Provisions (O\u02bbahu)"
     },
@@ -17776,7 +17776,7 @@
       "vendor": "Kuwale Ridge Farms (O\u02bbahu)"
     },
     "7688056307769": {
-      "available": true,
+      "available": false,
       "collections": [
         "produce"
       ],
@@ -17787,7 +17787,7 @@
         "Mango"
       ],
       "notified_back_in_stock_at": null,
-      "notified_first": true,
+      "notified_first": false,
       "title": "Green Mango",
       "vendor": "Makaha Mangoes (O\u02bbahu)"
     },
@@ -19502,7 +19502,7 @@
       "vendor": "Okonokai (Hawai\u02bbi)"
     },
     "7811958734905": {
-      "available": true,
+      "available": false,
       "collections": [
         "drinks"
       ],
@@ -19513,7 +19513,7 @@
         "Sweet Cane Cafe drinks (not Cacao Nectar)"
       ],
       "notified_back_in_stock_at": null,
-      "notified_first": true,
+      "notified_first": false,
       "title": "Meyer Lemon Juice",
       "vendor": "Sweet Cane Cafe (Hawai\u02bbi)"
     },
@@ -20326,7 +20326,7 @@
       "vendor": "Kozen Farm (Hawai\u02bbi)"
     },
     "7870333550649": {
-      "available": true,
+      "available": false,
       "collections": [
         "drinks"
       ],
@@ -20338,7 +20338,7 @@
         "Sweet Cane Cafe drinks (not Cacao Nectar)"
       ],
       "notified_back_in_stock_at": null,
-      "notified_first": true,
+      "notified_first": false,
       "title": "Limeaide Cane Juice",
       "vendor": "Sweet Cane Cafe (Hawai\u02bbi)"
     },
@@ -20919,7 +20919,7 @@
       "vendor": "Green Monster Farm (O\u02bbahu)"
     },
     "7898640449593": {
-      "available": true,
+      "available": false,
       "collections": [
         "produce"
       ],
@@ -20930,7 +20930,7 @@
         "Mango"
       ],
       "notified_back_in_stock_at": null,
-      "notified_first": true,
+      "notified_first": false,
       "title": "Carabao Mango",
       "vendor": "Makaha Mangoes (O\u02bbahu)"
     },
@@ -21383,7 +21383,7 @@
       "vendor": "Halm's Enterprises (O\u02bbahu)"
     },
     "7917270564921": {
-      "available": true,
+      "available": false,
       "collections": [
         "produce"
       ],
@@ -21394,7 +21394,7 @@
         "Mango"
       ],
       "notified_back_in_stock_at": null,
-      "notified_first": true,
+      "notified_first": false,
       "title": "Organic Haden Mango",
       "vendor": "MA\u2018O Organic Farms (O\u02bbahu)"
     },
@@ -21483,7 +21483,7 @@
       "vendor": "Tiny Isle (Kaua\u02bbi)"
     },
     "7919587164217": {
-      "available": true,
+      "available": false,
       "collections": [
         "produce"
       ],
@@ -21494,7 +21494,7 @@
         "Mango"
       ],
       "notified_back_in_stock_at": null,
-      "notified_first": true,
+      "notified_first": false,
       "title": "Organic Mapulehu Mango",
       "vendor": "MA\u2018O Organic Farms (O\u02bbahu)"
     },
@@ -21725,7 +21725,7 @@
       "vendor": "Lokoea Farms (O\u02bbahu)"
     },
     "7927323394105": {
-      "available": true,
+      "available": false,
       "collections": [
         "produce"
       ],
@@ -21736,7 +21736,7 @@
         "Mango"
       ],
       "notified_back_in_stock_at": null,
-      "notified_first": true,
+      "notified_first": false,
       "title": "Pirie Mango",
       "vendor": "Makaha Mangoes (O\u02bbahu)"
     },
@@ -22023,7 +22023,7 @@
       "vendor": "Lokoea Farms (O\u02bbahu)"
     },
     "7968031801401": {
-      "available": true,
+      "available": false,
       "collections": [
         "produce"
       ],
@@ -22034,7 +22034,7 @@
         "Pineapple (not Dole)"
       ],
       "notified_back_in_stock_at": null,
-      "notified_first": true,
+      "notified_first": false,
       "title": "Maui Sugar Pineapple",
       "vendor": "Hiki No Farms (O\u02bbahu)"
     },
@@ -22119,7 +22119,7 @@
       "vendor": "Farm Link Hawai\u02bbi (O\u02bbahu)"
     },
     "7974226853945": {
-      "available": true,
+      "available": false,
       "collections": [
         "produce"
       ],
@@ -22130,7 +22130,7 @@
         "Mango"
       ],
       "notified_back_in_stock_at": null,
-      "notified_first": true,
+      "notified_first": false,
       "title": "Frozen Mango",
       "vendor": "Farm Link Hawai\u02bbi (O\u02bbahu)"
     },
@@ -23169,7 +23169,7 @@
       "vendor": "Mille F\u00eate (O\u02bbahu)"
     },
     "8058674479161": {
-      "available": true,
+      "available": false,
       "collections": [
         "produce"
       ],
@@ -23180,7 +23180,7 @@
         "Sugarcane (produce)"
       ],
       "notified_back_in_stock_at": null,
-      "notified_first": true,
+      "notified_first": false,
       "title": "Organic Sugarcane",
       "vendor": "Ginger Ridge Farms (Hawai\u02bbi)"
     },
