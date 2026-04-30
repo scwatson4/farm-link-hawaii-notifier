@@ -13,7 +13,7 @@ import os
 import re
 import sys
 import time
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
 
@@ -64,8 +64,6 @@ CONFIG: dict[str, Any] = {
     "request_timeout": 30,
     "discord_max_embeds": 10,
     "discord_webhook_username": "Farm Link Hawaii Watch",
-    "color_watchlist": 0x2ECC71,
-    "color_new_in_produce": 0x3498DB,
 }
 
 REPO_ROOT = Path(__file__).resolve().parent
@@ -335,80 +333,128 @@ def write_state(state: dict[str, Any]) -> None:
     tmp.replace(STATE_PATH)
 
 
-def record_product(state_products: dict[str, Any], cur: dict[str, Any], matched_rules: list[str], *, first: bool, notified_first: bool) -> None:
-    ts = now_iso()
-    state_products[cur["id"]] = {
-        "title": cur["title"],
-        "handle": cur["handle"],
-        "vendor": cur["vendor"],
-        "collections": list(cur["collections"]),
-        "first_seen": ts,
-        "last_seen": ts,
-        "available": cur["available"],
-        "matched_rules": list(matched_rules),
-        "notified_first": notified_first,
-        "notified_back_in_stock_at": None,
-    }
+# ---------- digest ----------
+
+# Discord embed limits: 4096 chars in description, 6000 chars total per
+# message, max 10 embeds per message. We chunk well under those.
+_EMBED_DESC_BUDGET = 3500
+_DIGEST_HAWAII_TZ = timezone(timedelta(hours=-10))  # HST, no DST
+COLOR_NEW_TODAY = 0x3498DB        # blue
+COLOR_WATCHLIST = 0x2ECC71        # green
 
 
-# ---------- Discord ----------
+def hawaii_today() -> str:
+    return datetime.now(_DIGEST_HAWAII_TZ).strftime("%Y-%m-%d")
 
-def build_embed(cur: dict[str, Any], matched_rules: list[str], reason: str, *, new_in_produce: bool) -> dict[str, Any]:
-    price = None
-    if cur.get("price_min") is not None:
-        price = (float(cur["price_min"]), float(cur["price_max"]))
 
-    fields_text: list[str] = []
-    if cur["vendor"]:
-        fields_text.append(f"Vendor: {cur['vendor']}")
-    fields_text.append(f"Price: {format_price(price)}")
-    fields_text.append(f"Availability: {'In stock' if cur['available'] else 'Out of stock'}")
-    if cur["collections"]:
-        fields_text.append(f"Collections: {', '.join(cur['collections'])}")
-    if matched_rules:
-        fields_text.append(f"Matched: {', '.join(matched_rules)}")
-    fields_text.append(f"Reason: {reason}")
+def _bullet(p: dict[str, Any], rules_label: str | None) -> str:
+    price = (
+        (float(p["price_min"]), float(p["price_max"]))
+        if p.get("price_min") is not None else None
+    )
+    handle = p["handle"] or ""
+    title = p["title"] or handle or "Untitled"
+    url = f"{CONFIG['store_base']}/products/{handle}"
+    parts = [f"**[{title}]({url})**"]
+    if p.get("vendor"):
+        parts.append(p["vendor"])
+    parts.append(format_price(price))
+    if rules_label:
+        parts.append(rules_label)
+    return "• " + " — ".join(parts)
 
-    only_new_in_produce = new_in_produce and not matched_rules
-    color = CONFIG["color_new_in_produce"] if only_new_in_produce else CONFIG["color_watchlist"]
 
-    return {
-        "title": cur["title"] or cur["handle"] or f"Product {cur['id']}",
-        "url": f"{CONFIG['store_base']}/products/{cur['handle']}",
-        "color": color,
-        "description": "\n".join(f"• {line}" for line in fields_text),
-    }
+def _chunk_lines(lines: list[str], budget: int = _EMBED_DESC_BUDGET) -> list[str]:
+    """Pack lines into chunks each <= budget chars."""
+    chunks: list[str] = []
+    buf: list[str] = []
+    used = 0
+    for line in lines:
+        n = len(line) + 1  # +1 for the joining newline
+        if used + n > budget and buf:
+            chunks.append("\n".join(buf))
+            buf, used = [], 0
+        buf.append(line)
+        used += n
+    if buf:
+        chunks.append("\n".join(buf))
+    return chunks
+
+
+def build_digest_embeds(
+    new_today: list[dict[str, Any]],
+    in_stock_watchlist: list[dict[str, Any]],
+    today: str,
+) -> list[dict[str, Any]]:
+    embeds: list[dict[str, Any]] = []
+
+    if new_today:
+        lines: list[str] = []
+        for entry in new_today:
+            star = " ⭐" if entry["matched"] else ""
+            label = ", ".join(entry["matched"]) if entry["matched"] else None
+            lines.append(_bullet(entry["cur"], label) + star)
+        for i, chunk in enumerate(_chunk_lines(lines)):
+            embeds.append({
+                "title": (
+                    f"🆕 New today — {today} ({len(new_today)})"
+                    if i == 0 else f"🆕 New today (cont. {i + 1})"
+                ),
+                "color": COLOR_NEW_TODAY,
+                "description": chunk,
+            })
+
+    if in_stock_watchlist:
+        lines = []
+        for entry in in_stock_watchlist:
+            label = ", ".join(entry["matched"])
+            lines.append(_bullet(entry["cur"], label))
+        for i, chunk in enumerate(_chunk_lines(lines)):
+            embeds.append({
+                "title": (
+                    f"🥭 Watchlist in stock — {today} ({len(in_stock_watchlist)})"
+                    if i == 0 else f"🥭 Watchlist in stock (cont. {i + 1})"
+                ),
+                "color": COLOR_WATCHLIST,
+                "description": chunk,
+            })
+
+    return embeds
 
 
 def post_discord(webhook_url: str, embeds: list[dict[str, Any]]) -> None:
-    payload = {
-        "username": CONFIG["discord_webhook_username"],
-        "embeds": embeds,
-    }
-    for attempt in (1, 2):
-        r = requests.post(webhook_url, json=payload, timeout=CONFIG["request_timeout"])
-        if r.status_code == 429 and attempt == 1:
-            retry_after = float(r.headers.get("Retry-After", "2"))
-            time.sleep(min(retry_after, 30))
-            continue
-        if not r.ok:
-            raise RuntimeError(f"discord POST failed: {r.status_code} {r.text[:200]}")
-        return
+    chunk_size = CONFIG["discord_max_embeds"]
+    for i in range(0, len(embeds), chunk_size):
+        payload = {
+            "username": CONFIG["discord_webhook_username"],
+            "embeds": embeds[i:i + chunk_size],
+        }
+        for attempt in (1, 2):
+            r = requests.post(webhook_url, json=payload, timeout=CONFIG["request_timeout"])
+            if r.status_code == 429 and attempt == 1:
+                retry_after = float(r.headers.get("Retry-After", "2"))
+                time.sleep(min(retry_after, 30))
+                continue
+            if not r.ok:
+                raise RuntimeError(f"discord POST failed: {r.status_code} {r.text[:200]}")
+            break
 
 
 # ---------- main ----------
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Farm Link Hawaii watchlist notifier")
-    parser.add_argument("--dry-run", action="store_true", help="print notifications; don't POST or write state")
+    parser = argparse.ArgumentParser(description="Farm Link Hawaii daily watchlist digest")
+    parser.add_argument("--dry-run", action="store_true", help="print digest; don't POST or write state")
     parser.add_argument("--force-bootstrap", action="store_true", help="reset state and re-record everything silently")
+    parser.add_argument("--force-digest", action="store_true", help="re-send digest even if already sent today")
     args = parser.parse_args()
 
     watchlist = yaml.safe_load(WATCHLIST_PATH.read_text()) or {}
     rules: list[dict[str, Any]] = watchlist.get("rules", []) or []
-    new_in_produce_enabled = bool((watchlist.get("new_in_produce") or {}).get("enabled"))
 
     webhook_url = os.environ.get("DISCORD_WEBHOOK_URL", "").strip()
+    today = hawaii_today()
+    ts = now_iso()
 
     session = build_session()
     validate_collection_groups(session)
@@ -417,73 +463,77 @@ def main() -> int:
     print(f"built catalog: {len(current)} unique products")
 
     state = load_state()
+
     if args.force_bootstrap or not state.get("bootstrapped"):
         products_state: dict[str, Any] = {}
         for pid, cur in current.items():
             matched = evaluate_rules(cur, rules)
-            record_product(products_state, cur, matched, first=True, notified_first=True)
-        new_state = {"bootstrapped": True, "products": products_state}
+            products_state[pid] = {
+                "title": cur["title"],
+                "handle": cur["handle"],
+                "vendor": cur["vendor"],
+                "collections": list(cur["collections"]),
+                "first_seen": ts,
+                "last_seen": ts,
+                "available": cur["available"],
+                "matched_rules": list(matched),
+            }
+        new_state = {
+            "bootstrapped": True,
+            "last_digest_date": today,
+            "last_run_at": ts,
+            "products": products_state,
+        }
         if args.dry_run:
             print(f"[dry-run] bootstrap would record {len(products_state)} products; not writing state")
         else:
             write_state(new_state)
-            print(f"bootstrapped {len(products_state)} products; no notifications sent")
+            print(f"bootstrapped {len(products_state)} products; no digest sent")
         return 0
 
     prior_products: dict[str, Any] = state.get("products", {}) or {}
-    notifications: list[dict[str, Any]] = []
-    new_products_state: dict[str, Any] = {}
-    confirmations = 0
+    last_digest_date = state.get("last_digest_date")
+    already_sent_today = (last_digest_date == today) and not args.force_digest
 
+    # Section A: products that weren't in the prior catalog snapshot.
+    new_today: list[dict[str, Any]] = []
+    for pid, cur in current.items():
+        if pid in prior_products:
+            continue
+        matched = evaluate_rules(cur, rules)
+        new_today.append({"pid": pid, "cur": cur, "matched": matched})
+
+    # Section B: every watchlist match that's currently in stock per the
+    # storefront HTML (the bulk products.json `available` flag is stale).
+    in_stock_watchlist: list[dict[str, Any]] = []
+    confirmed_stock_pids: set[str] = set()
+    confirmed_oos_pids: set[str] = set()
     for pid, cur in current.items():
         matched = evaluate_rules(cur, rules)
-        is_in_produce = "produce" in cur["collections"]
-        ts = now_iso()
-
-        prior = prior_products.get(pid)
-        prev_notified_first = bool(prior.get("notified_first")) if prior else False
-        prev_available = bool(prior.get("available")) if prior else False
-        prev_notified_back = prior.get("notified_back_in_stock_at") if prior else None
-
-        notified_first_out = prev_notified_first
-        notified_back_out = prev_notified_back
-
-        # The bulk /products.json `available` flag is stale for this store.
-        # For any product that WOULD alert if in stock, confirm availability
-        # against the storefront HTML before firing. Products that aren't
-        # candidates for alerting skip the extra request.
-        alert_candidate = (
-            (not prev_notified_first and (matched or (new_in_produce_enabled and is_in_produce)))
-            or (prev_notified_first and matched and not prev_available and not prev_notified_back)
-        )
-        if alert_candidate and cur["available"]:
-            confirmations += 1
-            if not confirm_in_stock(session, cur["handle"]):
-                cur["available"] = False
-
-        if not prev_notified_first:
-            if cur["available"]:
-                if matched:
-                    notifications.append(build_embed(
-                        cur, matched, "First seen", new_in_produce=False,
-                    ))
-                    notified_first_out = True
-                elif new_in_produce_enabled and is_in_produce:
-                    notifications.append(build_embed(
-                        cur, matched, "New in produce", new_in_produce=True,
-                    ))
-                    notified_first_out = True
-        else:
-            if matched and not prev_available and cur["available"] and not prev_notified_back:
-                notifications.append(build_embed(
-                    cur, matched, "Back in stock", new_in_produce=False,
-                ))
-                notified_back_out = ts
-
-        # Re-arm restock alerts whenever the product is currently out of stock.
+        if not matched:
+            continue
         if not cur["available"]:
-            notified_back_out = None
+            continue  # trust the bulk feed's negative
+        if confirm_in_stock(session, cur["handle"]):
+            confirmed_stock_pids.add(pid)
+            in_stock_watchlist.append({"pid": pid, "cur": cur, "matched": matched})
+        else:
+            confirmed_oos_pids.add(pid)
 
+    # Sort each section: matched-watchlist first, then alphabetical by title.
+    new_today.sort(key=lambda e: (not e["matched"], (e["cur"]["title"] or "").lower()))
+    in_stock_watchlist.sort(key=lambda e: (e["cur"]["title"] or "").lower())
+
+    # Build the new state. Use the HTML-confirmed availability when we have it.
+    new_products_state: dict[str, Any] = {}
+    for pid, cur in current.items():
+        prior = prior_products.get(pid)
+        matched = evaluate_rules(cur, rules)
+        avail = cur["available"]
+        if pid in confirmed_oos_pids:
+            avail = False
+        elif pid in confirmed_stock_pids:
+            avail = True
         new_products_state[pid] = {
             "title": cur["title"],
             "handle": cur["handle"],
@@ -491,41 +541,50 @@ def main() -> int:
             "collections": list(cur["collections"]),
             "first_seen": (prior.get("first_seen") if prior else None) or ts,
             "last_seen": ts,
-            "available": cur["available"],
+            "available": avail,
             "matched_rules": list(matched),
-            "notified_first": notified_first_out,
-            "notified_back_in_stock_at": notified_back_out,
         }
-
-    # Products that vanished from the fetch: keep them, mark unavailable, re-arm restock.
+    # Carry over products that fell out of the fetch (mark unavailable).
     for pid, prior in prior_products.items():
         if pid in new_products_state:
             continue
         carried = dict(prior)
         carried["available"] = False
-        carried["notified_back_in_stock_at"] = None
-        carried["last_seen"] = prior.get("last_seen") or now_iso()
+        carried["last_seen"] = prior.get("last_seen") or ts
         new_products_state[pid] = carried
 
-    print(f"notifications queued: {len(notifications)} (confirmed stock on {confirmations} candidate(s))")
+    print(
+        f"new today: {len(new_today)}, "
+        f"watchlist in stock: {len(in_stock_watchlist)} "
+        f"(confirmed OOS on {len(confirmed_oos_pids)} candidate(s))"
+    )
+
+    embeds = build_digest_embeds(new_today, in_stock_watchlist, today)
 
     if args.dry_run:
-        for i, emb in enumerate(notifications, 1):
-            print(f"--- notification {i} ---")
-            print(json.dumps(emb, indent=2))
+        for i, emb in enumerate(embeds, 1):
+            print(f"--- embed {i} ---")
+            print(json.dumps(emb, indent=2, ensure_ascii=False))
         print("[dry-run] not POSTing, not writing state")
         return 0
 
-    if notifications:
+    if embeds and already_sent_today:
+        print(f"already sent digest for {today}; skipping POST (use --force-digest to override)")
+    elif embeds:
         if not webhook_url:
-            print("ERROR: DISCORD_WEBHOOK_URL not set but notifications are queued", file=sys.stderr)
+            print("ERROR: DISCORD_WEBHOOK_URL not set but digest is queued", file=sys.stderr)
             return 2
-        chunk = CONFIG["discord_max_embeds"]
-        for i in range(0, len(notifications), chunk):
-            post_discord(webhook_url, notifications[i:i + chunk])
-        print(f"posted {len(notifications)} embeds to Discord")
+        post_discord(webhook_url, embeds)
+        print(f"posted digest with {len(embeds)} embed(s) to Discord")
+    else:
+        print("nothing to report today")
 
-    write_state({"bootstrapped": True, "products": new_products_state})
+    write_state({
+        "bootstrapped": True,
+        "last_digest_date": today if (embeds and not already_sent_today) else last_digest_date,
+        "last_run_at": ts,
+        "products": new_products_state,
+    })
     return 0
 
 

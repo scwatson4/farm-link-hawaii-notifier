@@ -15,6 +15,11 @@ rules:
       - title_contains: passion fruit
       - title_contains: passionfruit
 
+  - name: "Coconut"
+    collections: [produce]
+    match_any:
+      - title_contains: coconut
+
   - name: "Sugarcane (produce)"
     collections: [produce]
     match_any:
@@ -41,7 +46,3 @@ rules:
       - vendor_equals: Sweet Cane Cafe
     exclude_if_any:
       - title_contains: cacao nectar
-
-new_in_produce:
-  enabled: true   # fires on never-before-seen items in the produce collection
-                  # (serves as the "unique fruit" alert)
