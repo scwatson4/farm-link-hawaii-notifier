@@ -15,6 +15,22 @@ rules:
       - title_contains: passion fruit
       - title_contains: passionfruit
 
+  - name: "Lychee"
+    collections: [produce]
+    match_any:
+      - title_contains: lychee
+
+  - name: "Rambutan"
+    collections: [produce]
+    match_any:
+      - title_contains: rambutan
+
+  - name: "Dragon fruit"
+    collections: [produce]
+    match_any:
+      - title_contains: dragon fruit
+      - title_contains: pitaya
+
   - name: "Coconut"
     collections: [produce]
     match_any:
