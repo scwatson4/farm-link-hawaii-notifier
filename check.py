@@ -173,12 +173,17 @@ _ADD_BUTTON_RE = re.compile(r'<button[^>]*\bname="add"[^>]*>', re.IGNORECASE)
 def confirm_in_stock(session: requests.Session, handle: str) -> bool:
     """Fetch the product's storefront HTML and confirm the add-to-cart button
     is enabled. Fail closed on network errors (treat as not in stock) so a
-    Shopify blip can't produce false-positive alerts."""
+    Shopify blip can't produce false-positive alerts.
+
+    The session's default Accept header is JSON for the API calls, but the
+    storefront returns a 3KB stub instead of the full HTML page when that
+    header is sent. Override it for this request."""
     url = f"{CONFIG['store_base']}/products/{handle}"
+    headers = {"Accept": "text/html,application/xhtml+xml,*/*;q=0.8"}
     text: str | None = None
     for attempt in range(4):
         try:
-            r = session.get(url, timeout=CONFIG["request_timeout"])
+            r = session.get(url, headers=headers, timeout=CONFIG["request_timeout"])
         except requests.RequestException:
             pass
         else:
